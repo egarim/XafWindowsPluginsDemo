@@ -17,7 +17,17 @@ namespace WindowsFormsPlugin
 
         public void ShowWindow(IObjectSpace Os)
         {
+           
             Form1 form = new Form1(Os);
+
+            List<string> Properties = new List<string>();
+            Properties.Add("Name");
+            Properties.Add("LastName");
+
+
+
+            FormElementsHelper formElementsHelper = new FormElementsHelper(form, Properties);
+            formElementsHelper.CreateFormElements();
             form.Show();
         }
     }

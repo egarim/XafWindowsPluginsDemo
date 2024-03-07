@@ -42,19 +42,22 @@ namespace XafWindowsPluginsDemo.Module.Win.Controllers
         }
         private void ShowPlugin_Execute(object sender, SimpleActionExecuteEventArgs e)
         {
+            var CurrentPlugin = this.View.CurrentObject as Plugin;
             AppDomain.CurrentDomain.AssemblyResolve += (DomainSender, args) =>
             {
                 string assemblyName = new AssemblyName(args.Name).Name + ".dll";
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyName))
-                {
-                    if (stream == null) return null;
-                    byte[] assemblyData = new byte[stream.Length];
-                    stream.Read(assemblyData, 0, assemblyData.Length);
-                    return Assembly.Load(assemblyData);
-                }
+
+                return Assembly.LoadFrom(Path.Combine(CurrentPlugin.Path, assemblyName));
+                //using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(assemblyName))
+                //{
+                //    if (stream == null) return null;
+                //    byte[] assemblyData = new byte[stream.Length];
+                //    stream.Read(assemblyData, 0, assemblyData.Length);
+                //    return Assembly.Load(assemblyData);
+                //}
             };
 
-            var CurrentPlugin=this.View.CurrentObject as Plugin;
+           
             string assemblyFile = Path.Combine(CurrentPlugin.Path, CurrentPlugin.Dll);
             Assembly loadedAssembly = Assembly.LoadFrom(assemblyFile);
 
